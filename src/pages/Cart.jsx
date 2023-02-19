@@ -71,7 +71,7 @@ function Cart() {
               <div>coupon</div>
               <div>no</div>
             </div><hr/>
-            <button style={{width:"100%",padding:"1rem"}}>PAY</button>
+            <button style={{width:"100%",padding:"1rem",backgroundColor:"rgb(78, 158, 255)",borderRadius:"6px"}}>PAY</button>
           </div>
           
 
