@@ -20,7 +20,8 @@ function Items(props) {
     addlist.push({
       name:name,
       img:img,
-      offer:offer
+      offer:offer,
+      qty:1
     })
     console.log(addlist)
     console.log(cartdata)
