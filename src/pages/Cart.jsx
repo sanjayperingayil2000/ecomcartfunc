@@ -1,18 +1,49 @@
-import React,{useState} from 'react'
+import React,{useReducer} from 'react'
 // import { useContext } from 'react';
 import Header from '../components/Header'
 // import { useLocation } from 'react-router-dom'
 import {cartdata} from "../datas/cartdata"
 import Footer from '../components/Footer'
 
-function Cart() {
-  // const [data] = useContext(datas);
-  // const location=useLocation();
-  // const {data }=location.state;
-  // const {addToCart}=location.state
-  // console.log(data)
-  const [price,setprice]=useState(1)
 
+const initialState = cartdata
+const reducer = (state, action) => {
+  
+  switch (action.type) {
+    case "increment":
+      return state.map((cart) => {
+        if (cart.offer === action.offer) {
+          // const temqty=cart.qty + 1
+          return { ...cart, qty: cart.qty+1 };
+        } else {
+          return cart;
+        }
+      });
+      case "decrement":
+        return state.map((cart) => {
+          if (cart.offer === action.offer) {
+            // const temqty=cart.qty + 1
+            return { ...cart, qty: cart.qty-1 };
+          } else {
+            return cart;
+          }
+        });
+    default:
+      return state;
+  }
+};
+
+function Cart() {
+
+  // const [price,setprice]=useState(1)
+  const [cart, dispatch] = useReducer(reducer, initialState);
+
+  const incrementfunc = (cart) => {
+    dispatch({ type: "increment", offer: cart.offer });
+  };
+  const decrementfunc = (cart) => {
+    dispatch({ type: "decrement", offer: cart.offer });
+  };
 
   return (
     <div>
@@ -33,24 +64,25 @@ function Cart() {
           {
           // let a=1
           // let price=1
-          cartdata && cartdata.map((val)=>{
+          cart && cart.map((val)=>{
             // let price=1
             // const [price,setprice]=useState(1)
               return(
                 <>
-                  <div key={val._id} style={{width:"100%",margin:"2px"}}>
+                  <div style={{width:"100%",margin:"2px"}}>
                     <div style={{width:"40%",display:"inline-block"}}>
                       <img style={{width:"5rem",height:"5rem",margin:"0 10%",padding:"1px", objectFit:"contain"}} alt="" src={val.img}/>
                       <span>{val.name}</span>
                     </div>
                     <div style={{width:"20%",display:"inline-block"}}>
-                      {price*val.offer}
+                      {val.qty*val.offer}
+                      {/* {cart[product.id] || 0} */}
                     </div>
                     <div style={{width:"20%",display:"inline-block"}}>
                       <span style={{backgroundColor:"rgb(246, 246, 246)"}}>
-                        <button style={{backgroundColor:"rgb(246, 246, 246)"}} onClick={()=>{setprice(price+1)}}>+</button>
-                        &nbsp;&nbsp;&nbsp;<span>{price}</span>&nbsp;&nbsp;&nbsp;
-                        <button style={{backgroundColor:"rgb(246, 246, 246)"}} onClick={()=>{setprice(price-1)}}>-</button>
+                        <button style={{backgroundColor:"rgb(246, 246, 246)"}} onClick={()=>incrementfunc(val)}>+</button>
+                        &nbsp;&nbsp;&nbsp;<span>{val.qty}</span>&nbsp;&nbsp;&nbsp;
+                        <button style={{backgroundColor:"rgb(246, 246, 246)"}} onClick={()=>decrementfunc(val)}>-</button>
                       </span>
                     </div>
                     <div style={{width:"20%",display:"inline-block"}}>{val.offer}</div><br/><br/><hr/><br/>
